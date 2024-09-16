@@ -5,7 +5,7 @@
   "parameters": {
     "repoURL": {
       "type": "string",
-      "defaultValue": "https://github.com/v-sosah/AzureMediaDeployment.git",
+      "defaultValue": "https://github.com/upendrasingh1989/DurinMediaV2.git",
       "metadata": {
         "description": "The URL for the GitHub repository that contains the project to deploy."
       }
@@ -31,9 +31,7 @@
     "functionHostingPlanName": "[take(concat('plan-', variables('uniqueName')), 40)]",
     "functionStorageAccountName": "[toLower(take(concat('stfun', variables('uniqueName')), 24))]",
     "functionServerFarmId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('functionHostingPlanName'))]",
-
     "appInsightsName": "[take(concat('appi-', variables('uniqueName')), 255)]",
-
     "readerAndDataAccessRoleId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'c12c1c16-33a1-487b-954d-41c89c60f349')]",
     "storageBlobDataContributorRoleId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
     "vendorStorageName": "[take(concat('vendor', parameters('blobStorageName')),24)]"
@@ -56,6 +54,26 @@
       ],
       "properties": {
         "name": "[variables('functionAppName')]",
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('functionAppName'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('functionAppName'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "dnsConfiguration": {},
+        "vnetRouteAllEnabled": false,
+        "vnetImagePullEnabled": false,
+        "vnetContentShareEnabled": false,
         "siteConfig": {
           "appSettings": [
             {
@@ -94,10 +112,28 @@
               "name": "AZURE_STORAGE_CONNECTION_STRING_VENDOR",
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('vendorStorageName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('vendorStorageName')),'2019-06-01').keys[0].value)]"
             }
-          ]
+          ],
+          "numberOfWorkers": 1,
+          "acrUseManagedIdentityCreds": false,
+          "alwaysOn": false,
+          "http20Enabled": false,
+          "functionAppScaleLimit": 200,
+          "minimumElasticInstanceCount": 0
         },
         "serverFarmId": "[variables('functionServerFarmId')]",
-        "clientAffinityEnabled": true
+        "clientAffinityEnabled": true,
+        "scmSiteAlsoStopped": false,
+        "clientCertEnabled": false,
+        "clientCertMode": "Required",
+        "hostNamesDisabled": false,
+        "vnetBackupRestoreEnabled": false,
+        "customDomainVerificationId": "2FAABA51D93D79638749973EF3BAEBC6240E0B97B928389BB008E8FBC7F4E74C",
+        "containerSize": 1536,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": true,
+        "redundancyMode": "None",
+        "storageAccountRequired": false,
+        "keyVaultReferenceIdentity": "SystemAssigned"
       },
       "resources": [
         {
