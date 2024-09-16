@@ -57,12 +57,12 @@
         "enabled": true,
         "hostNameSslStates": [
           {
-            "name": "[concat(parameters('functionAppName'), '.azurewebsites.net')]",
+            "name": "[concat(variables('functionAppName'), '.azurewebsites.net')]",
             "sslState": "Disabled",
             "hostType": "Standard"
           },
           {
-            "name": "[concat(parameters('functionAppName'), '.scm.azurewebsites.net')]",
+            "name": "[concat(variables('functionAppName'), '.scm.azurewebsites.net')]",
             "sslState": "Disabled",
             "hostType": "Repository"
           }
