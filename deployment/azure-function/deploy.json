@@ -160,11 +160,25 @@
       "tags": {},
       "dependsOn": [],
       "properties": {
-        "name": "[variables('functionHostingPlanName')]"
-
+        "name": "[variables('functionHostingPlanName')]",
+        "numberOfWorkers": 1,
+        "perSiteScaling": false,
+        "elasticScaleEnabled": false,
+        "maximumElasticWorkerCount": 1,
+        "isSpot": false,
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "targetWorkerCount": 0,
+        "targetWorkerSizeId": 0,
+        "zoneRedundant": false
       },
       "sku": {
-        "Name": "F1"
+        "name": "Y1",
+        "tier": "Dynamic",
+        "size": "Y1",
+        "family": "Y",
+        "capacity": 0
       }
     },
     {
