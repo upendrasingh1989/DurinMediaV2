@@ -1,6 +1,5 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-
   "contentVersion": "1.0.0.0",
   "parameters": {
     "repoURL": {
@@ -36,7 +35,7 @@
     "storageBlobDataContributorRoleId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
     "vendorStorageName": "[take(concat('vendor', parameters('blobStorageName')),24)]"
   },
-  "resources": [    
+  "resources": [
     {
       "apiVersion": "2018-11-01",
       "name": "[variables('functionAppName')]",
@@ -54,26 +53,6 @@
       ],
       "properties": {
         "name": "[variables('functionAppName')]",
-        "enabled": true,
-        "hostNameSslStates": [
-          {
-            "name": "[concat(variables('functionAppName'), '.azurewebsites.net')]",
-            "sslState": "Disabled",
-            "hostType": "Standard"
-          },
-          {
-            "name": "[concat(variables('functionAppName'), '.scm.azurewebsites.net')]",
-            "sslState": "Disabled",
-            "hostType": "Repository"
-          }
-        ],
-        "reserved": false,
-        "isXenon": false,
-        "hyperV": false,
-        "dnsConfiguration": {},
-        "vnetRouteAllEnabled": false,
-        "vnetImagePullEnabled": false,
-        "vnetContentShareEnabled": false,
         "siteConfig": {
           "appSettings": [
             {
@@ -112,28 +91,10 @@
               "name": "AZURE_STORAGE_CONNECTION_STRING_VENDOR",
               "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('vendorStorageName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('vendorStorageName')),'2019-06-01').keys[0].value)]"
             }
-          ],
-          "numberOfWorkers": 1,
-          "acrUseManagedIdentityCreds": false,
-          "alwaysOn": false,
-          "http20Enabled": false,
-          "functionAppScaleLimit": 200,
-          "minimumElasticInstanceCount": 0
+          ]
         },
         "serverFarmId": "[variables('functionServerFarmId')]",
-        "clientAffinityEnabled": true,
-        "scmSiteAlsoStopped": false,
-        "clientCertEnabled": false,
-        "clientCertMode": "Required",
-        "hostNamesDisabled": false,
-        "vnetBackupRestoreEnabled": false,
-        "customDomainVerificationId": "2FAABA51D93D79638749973EF3BAEBC6240E0B97B928389BB008E8FBC7F4E74C",
-        "containerSize": 1536,
-        "dailyMemoryTimeQuota": 0,
-        "httpsOnly": true,
-        "redundancyMode": "None",
-        "storageAccountRequired": false,
-        "keyVaultReferenceIdentity": "SystemAssigned"
+        "clientAffinityEnabled": true
       },
       "resources": [
         {
@@ -156,19 +117,20 @@
       "name": "[variables('functionHostingPlanName')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[variables('deploymentLocation')]",
-      "kind": "",
+      "kind": "functionapp",
       "tags": {},
       "dependsOn": [],
       "properties": {
-         "perSiteScaling": false,
-         "elasticScaleEnabled": false,
-          "maximumElasticWorkerCount": 1,
-          "isSpot": false,
-          "reserved": false,
-          "isXenon": false,
-          "hyperV": false,
-          "targetWorkerCount": 0,
-          "targetWorkerSizeId": 0,
+        "name": "[variables('functionHostingPlanName')]",
+        "perSiteScaling": false,
+        "elasticScaleEnabled": false,
+        "maximumElasticWorkerCount": 1,
+        "isSpot": false,
+        "reserved": false,
+        "isXenon": false,
+        "hyperV": false,
+        "targetWorkerCount": 0,
+        "targetWorkerSizeId": 0,
         "zoneRedundant": false
       },
       "sku": {
@@ -227,8 +189,7 @@
         "roleDefinitionId": "[variables('storageBlobDataContributorRoleId')]",
         "principalId": "[reference(resourceId('Microsoft.Web/sites', variables('functionAppName')), '2019-08-01', 'Full').identity.principalId]"
       }
-    }    
+    }
   ],
-  "outputs": {
-  }
+  "outputs": {}
 }
